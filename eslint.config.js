@@ -29,5 +29,8 @@ export default [
 	},
 	{
 		ignores: ['build/', '.svelte-kit/', 'dist/']
+	},
+	{
+		rules: [{ '@typescript-eslint/no-implicit-any': 'off' }]
 	}
 ];

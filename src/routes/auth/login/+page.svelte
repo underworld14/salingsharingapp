@@ -1,34 +1,68 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { superForm } from 'sveltekit-superforms';
+
+	import * as Form from '$lib/components/ui/form';
+	import * as Card from '$lib/components/ui/card';
+	import { Input } from '$lib/components/ui/input';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { loginSchema } from '$lib/schemes/auth.scheme.js';
+
+	export let data;
+
+	const form = superForm(data.form, {
+		validators: zodClient(loginSchema)
+	});
+
+	const { form: formData, enhance } = form;
 </script>
 
+<!-- <form method="POST" use:enhance> -->
 <Card.Root class="mx-auto max-w-sm">
 	<Card.Header>
-		<Card.Title class="text-2xl">Login</Card.Title>
-		<Card.Description>Enter your email below to login to your account</Card.Description>
+		<Card.Title class="text-2xl">Saling Sharing</Card.Title>
+		<Card.Description>Masuk ke akunmu untuk melanjutkan ke Aplikasi</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<div class="grid gap-4">
-			<div class="grid gap-2">
-				<Label for="email">Email</Label>
-				<Input id="email" type="email" placeholder="m@example.com" required />
+		<form method="POST" use:enhance>
+			<div class="grid gap-3">
+				<Form.Field {form} name="email">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<Form.Label>Email</Form.Label>
+							<Input
+								{...attrs}
+								bind:value={$formData.email}
+								placeholder="Masukkan alamat emailmu"
+							/>
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Field {form} name="password">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<div class="flex items-center">
+								<Form.Label>Password</Form.Label>
+								<a href="##" class="ml-auto inline-block text-sm underline"> Lupa password? </a>
+							</div>
+							<Input
+								type="password"
+								{...attrs}
+								bind:value={$formData.password}
+								placeholder="Masukkan password"
+							/>
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Button class="w-full">Login</Form.Button>
 			</div>
-			<div class="grid gap-2">
-				<div class="flex items-center">
-					<Label for="password">Password</Label>
-					<a href="##" class="ml-auto inline-block text-sm underline"> Forgot your password? </a>
-				</div>
-				<Input id="password" type="password" required />
+			<div class="mt-4 text-center text-sm">
+				Belum punya akun?
+				<a href="##" class="underline">Daftar Sekarang</a>
 			</div>
-			<Button type="submit" class="w-full">Login</Button>
-			<Button variant="outline" class="w-full">Login with Google</Button>
-		</div>
-		<div class="mt-4 text-center text-sm">
-			Don&apos;t have an account?
-			<a href="##" class="underline">Sign up</a>
-		</div>
+		</form>
 	</Card.Content>
 </Card.Root>

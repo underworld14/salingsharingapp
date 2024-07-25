@@ -1,41 +1,101 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
+
+	import * as Form from '$lib/components/ui/form';
+	import * as Card from '$lib/components/ui/card';
+	import { Input } from '$lib/components/ui/input';
+	import { registerSchema } from '$lib/schemes/auth.scheme.js';
+
+	export let data;
+
+	const form = superForm(data.form, {
+		validators: zodClient(registerSchema),
+		onUpdate: ({ form }) => {
+			if (form.message) {
+				if (form.message.success) {
+					toast.success(form.message.message);
+					return goto('/auth/login');
+				} else {
+					toast.error(form.message.message);
+				}
+			}
+		}
+	});
+
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <Card.Root class="mx-auto max-w-sm">
 	<Card.Header>
-		<Card.Title class="text-xl">Sign Up</Card.Title>
-		<Card.Description>Enter your information to create an account</Card.Description>
+		<Card.Title class="text-2xl">Daftar di Saling Sharing</Card.Title>
+		<Card.Description>Daftar dan sharing pengalaman dan ilmu dengan dunia</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<div class="grid gap-4">
-			<div class="grid grid-cols-2 gap-4">
-				<div class="grid gap-2">
-					<Label for="first-name">First name</Label>
-					<Input id="first-name" placeholder="Max" required />
-				</div>
-				<div class="grid gap-2">
-					<Label for="last-name">Last name</Label>
-					<Input id="last-name" placeholder="Robinson" required />
-				</div>
+		<form method="POST" use:enhance>
+			<div class="grid gap-3">
+				<Form.Field {form} name="name">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<Form.Label>Nama Lengkap</Form.Label>
+							<Input {...attrs} bind:value={$formData.name} placeholder="Masukkan nama lengkapmu" />
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Field {form} name="email">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<Form.Label>Email</Form.Label>
+							<Input
+								{...attrs}
+								bind:value={$formData.email}
+								placeholder="Masukkan alamat emailmu"
+							/>
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Field {form} name="password">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<Form.Label>Password</Form.Label>
+							<Input
+								type="password"
+								{...attrs}
+								bind:value={$formData.password}
+								placeholder="Masukkan password"
+							/>
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Field {form} name="password_confirmation">
+					<Form.Control let:attrs>
+						<div class="grid gap-2">
+							<Form.Label>Konfirmasi Password</Form.Label>
+							<Input
+								type="password"
+								{...attrs}
+								bind:value={$formData.password_confirmation}
+								placeholder="Masukkan konfirmasi password"
+							/>
+						</div>
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+
+				<Form.Button loading={$submitting} class="w-full">Daftar</Form.Button>
 			</div>
-			<div class="grid gap-2">
-				<Label for="email">Email</Label>
-				<Input id="email" type="email" placeholder="m@example.com" required />
+			<div class="mt-4 text-center text-sm">
+				Sudah punya akun ?
+				<a href="/auth/login" class="underline">Masuk lewat sini</a>
 			</div>
-			<div class="grid gap-2">
-				<Label for="password">Password</Label>
-				<Input id="password" type="password" />
-			</div>
-			<Button type="submit" class="w-full">Create an account</Button>
-			<Button variant="outline" class="w-full">Sign up with GitHub</Button>
-		</div>
-		<div class="mt-4 text-center text-sm">
-			Already have an account?
-			<a href="##" class="underline"> Sign in </a>
-		</div>
+		</form>
 	</Card.Content>
 </Card.Root>

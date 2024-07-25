@@ -3,11 +3,8 @@
 	import { Loader } from 'lucide-svelte';
 	import { type Events, type Props, buttonVariants } from './index.js';
 	import { cn } from '$lib/utils.js';
-	import { boolean } from 'zod';
 
-	type $$Props = Props & {
-		loading?: boolean;
-	};
+	type $$Props = Props;
 	type $$Events = Events;
 
 	let className: $$Props['class'] = undefined;

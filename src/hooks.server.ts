@@ -1,7 +1,7 @@
-// src/hooks.server.ts
 import PocketBase from 'pocketbase';
 import { PUBLIC_POCKET_URL } from '$env/static/public';
 import { redirect, type Handle } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.pb = new PocketBase(PUBLIC_POCKET_URL);
@@ -36,6 +36,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const response = await resolve(event);
-	response.headers.set('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: false }));
+	response.headers.append(
+		'set-cookie',
+		event.locals.pb.authStore.exportToCookie({ secure: dev ? false : true })
+	);
 	return response;
 };
