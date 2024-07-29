@@ -2,6 +2,7 @@
 	"name": "abqory-lms",
 	"version": "0.0.1",
 	"scripts": {
+		"start": "build/index.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -14,7 +15,6 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@ernane/svelte-star-rating": "^1.1.7",
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@playwright/test": "^1.28.1",
@@ -46,6 +46,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tadashi/svelte-editor-quill": "^3.0.1",
 		"bits-ui": "^0.21.12",
 		"clsx": "^2.1.1",
 		"formsnap": "^1.0.0",

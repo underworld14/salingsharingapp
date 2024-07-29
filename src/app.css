@@ -62,3 +62,7 @@ body,
 	@apply antialiased;
 	font-family: 'Inter', sans-serif;
 }
+
+#editor-container .ql-container.ql-snow {
+	height: 40vh;
+}
