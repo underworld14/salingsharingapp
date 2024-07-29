@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  salingsharingapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: salingsharingapp
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Jakarta
+      - PRIVATE_POCKET_URL=http://salingsharingpocket:8090
+    env_file:
+      - .env
+    networks:
+      - salingsharing-network
+
+  salingsharingpocket:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: salingsharingpocket
+    restart: unless-stopped
+    ports:
+      - '8090:8090'
+    volumes:
+      - ./pbdata/data:/pb_data
+      - ./pbdata/public:/pb_public #optional
+      - ./pbdata/hooks:/pb_hooks #optional
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - salingsharing-network
+
+networks:
+  salingsharing-network:
+    driver: bridge
