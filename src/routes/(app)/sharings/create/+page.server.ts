@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const actions = {
 	default: async ({ locals, request }) => {
@@ -6,6 +6,10 @@ export const actions = {
 		const title = formData.get('title');
 		const content = formData.get('content');
 		const images = formData.getAll('images');
+
+		if (!locals.user?.id) {
+			return error(401, 'Unauthorized');
+		}
 
 		try {
 			const sharing = await locals.pb.collection('sharings').create({
@@ -30,6 +34,6 @@ export const actions = {
 				}
 			};
 		}
-		return redirect(302, '/');
+		return redirect(302, '/notifications');
 	}
 };

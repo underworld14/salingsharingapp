@@ -4,6 +4,10 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async ({ locals }) => {
+	if (!locals.user) {
+		return error(401, 'Unauthorized');
+	}
+
 	const profile = await locals.pb.collection('users').getOne(locals.user.id);
 
 	if (!profile) {
@@ -32,6 +36,10 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	default: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Unauthorized');
+		}
+
 		const form = await superValidate(request, zod(profileSchema));
 
 		if (!form.valid) {

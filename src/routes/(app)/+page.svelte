@@ -2,6 +2,8 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import ArticleCard from '$lib/components/molecules/article-card.svelte';
+
+	export let data;
 </script>
 
 <div class="space-y-2 bg-[#dee0e1] pb-2">
@@ -25,7 +27,7 @@
 		</div>
 	</div>
 
-	{#each Array.from({ length: 10 }) as _, i}
-		<ArticleCard />
+	{#each data.sharings as sharing}
+		<ArticleCard trimContent currentUser={data.user} {sharing} />
 	{/each}
 </div>

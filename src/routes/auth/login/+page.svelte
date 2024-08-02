@@ -13,7 +13,7 @@
 		validators: zodClient(loginSchema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <!-- <form method="POST" use:enhance> -->
@@ -57,7 +57,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 
-				<Form.Button class="w-full">Login</Form.Button>
+				<Form.Button loading={$submitting} class="w-full">Login</Form.Button>
 			</div>
 			<div class="mt-4 text-center text-sm">
 				Belum punya akun?
