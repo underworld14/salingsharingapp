@@ -61,7 +61,7 @@
 			</div>
 			<div class="mt-4 text-center text-sm">
 				Belum punya akun?
-				<a href="##" class="underline">Daftar Sekarang</a>
+				<a href="/auth/register" class="underline">Daftar Sekarang</a>
 			</div>
 		</form>
 	</Card.Content>
